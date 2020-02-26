@@ -38,7 +38,7 @@ def process(index_url):
         os.chdir(dir_name)
         file_list_url = "http://cd.ys168.com/f_ht/ajcx/wj.aspx?cz=dq&mlbh=%s&_dlmc=%s&_dlmm="%(dir_id,username)
         file_list_text = requests.get(file_list_url).text
-        file_list_data = re.findall('<li .+?><a href="(.+?)" .+?>(.+?)</a>.+?</li>',file_list_text,re.DOTALL)
+        file_list_data = re.findall('<li id=.+?>.+?<a href="(.+?)".+?>(.+?)</a>.+?</li>',file_list_text,re.DOTALL)
         # print(file_list_data)
         for (file_url,file_name) in file_list_data:
             print(">>>> %s"%(file_name))
