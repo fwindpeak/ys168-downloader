@@ -6,9 +6,13 @@ import sys
 import re
 import os
 
-def download_file(url,save_path=None):
+SUBDIR="ys168_downloaded"
+
+def download_file(url,save_path=None,overwrite=False):
     if not save_path:
         save_path = url[url.rfind('/')+1:]
+    if os.path.exists(save_path) and not overwrite:
+        return
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
     block_size = 1024*16
@@ -42,8 +46,14 @@ def process(index_url):
         # print(file_list_data)
         for (file_url,file_name) in file_list_data:
             print(">>>> %s"%(file_name))
-            download_file(file_url,file_name)
+            try:
+                download_file(file_url,file_name)
+            except Exception as e:
+                print(e)
         os.chdir("..")
 
 if __name__ == '__main__':
+    if not os.path.exists(SUBDIR):
+        os.mkdir(SUBDIR)
+    os.chdir(SUBDIR)
     process(sys.argv[1])
